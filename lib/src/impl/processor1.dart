@@ -27,7 +27,7 @@ class Processor1 implements Processor {
           ..skipReason = test['metadata']['skipReason'] as String;
 
         tests[test['id'] as int] = testCase;
-        suites[test['suiteID']].tests.add(testCase);
+        suites[test['suiteID']]?.tests.add(testCase);
         break;
 
       case 'testDone':
@@ -36,7 +36,7 @@ class Processor1 implements Processor {
         }
 
         tests[event['testID'] as int]
-          ..endTime = event['time'] as int
+          ?..endTime = event['time'] as int
           ..hidden = event['hidden'] as bool;
         break;
 
@@ -48,12 +48,12 @@ class Processor1 implements Processor {
         break;
 
       case 'error':
-        tests[event['testID']].problems.add(Problem(event['error'] as String,
+        tests[event['testID']]?.problems.add(Problem(event['error'] as String,
             event['stackTrace'] as String, event['isFailure'] as bool));
         break;
 
       case 'print':
-        tests[event['testID'] as int].prints.add(event['message'] as String);
+        tests[event['testID'] as int]?.prints.add(event['message'] as String);
         break;
 
       case 'done':
@@ -75,13 +75,13 @@ class Processor1 implements Processor {
 }
 
 class _Test {
-  String name;
-  int startTime;
+  String name = '';
+  int startTime = 0;
   int endTime = unfinished;
-  String skipReason;
+  String skipReason = '';
   List<Problem> problems = <Problem>[];
   List<String> prints = <String>[];
-  bool hidden;
+  bool hidden = false;
 
   Test toTestCase() => Test(
         name,
@@ -94,8 +94,8 @@ class _Test {
 }
 
 class _Suite {
-  String path;
-  String platform;
+  String path = '';
+  String platform = '';
   List<_Test> tests = <_Test>[];
 
   Suite toTestSuite() => Suite(
