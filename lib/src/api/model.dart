@@ -11,7 +11,7 @@ class Report {
   final Iterable<Suite> suites;
 
   /// The timestamp of the test. Might be `null`.
-  final DateTime timestamp;
+  final DateTime? timestamp;
 
   /// Create a report with the given [suites] and [timestamp].
   Report(Iterable<Suite> suites, {this.timestamp})
@@ -73,7 +73,7 @@ class Test {
   final int duration;
 
   /// Indicates why was the test skipped.
-  final String skipReason;
+  final String? skipReason;
 
   /// [Problem]s occurred during the test.
   final Iterable<Problem> problems;
