@@ -17,16 +17,16 @@ class Processor1 implements Processor {
 
   @override
   void process(Map<String, dynamic> event) {
-    var type = event['type']??'' as String;
+    var type = (event['type']??'') as String;
     switch (type) {
       case 'testStart':
-        var test = event['test']??Map<String, dynamic>() as Map<String, dynamic>;
+        var test = (event['test']??<String, dynamic>{}) as Map<String, dynamic>;
         var testCase = _Test()
-          ..startTime = event['time']??0 as int
-          ..name = test['name']??'' as String
-          ..skipReason = test['metadata']['skipReason']??'' as String;
+          ..startTime = (event['time']??0) as int
+          ..name = (test['name']??'') as String
+          ..skipReason = (test['metadata']['skipReason']??'') as String;
 
-        tests[test['id']??0 as int] = testCase;
+        tests[(test['id']??0) as int] = testCase;
         suites[test['suiteID']??0]?.tests.add(testCase);
         break;
 
@@ -35,25 +35,25 @@ class Processor1 implements Processor {
           throw ArgumentError("Unknown result in '$event'");
         }
 
-        tests[event['testID']??0 as int]
-          ?..endTime = event['time']??0 as int
-          ..hidden = event['hidden']??false as bool;
+        tests[(event['testID']??0) as int]
+          ?..endTime = (event['time']??0) as int
+          ..hidden = (event['hidden']??false) as bool;
         break;
 
       case 'suite':
-        var suite = event['suite']??Map<String, dynamic>() as Map<String, dynamic>;
-        suites[suite['id']??0 as int] = _Suite()
-          ..path = suite['path']??'' as String
-          ..platform = suite['platform']??'' as String;
+        var suite = (event['suite']??<String, dynamic>{}) as Map<String, dynamic>;
+        suites[(suite['id']??0) as int] = _Suite()
+          ..path = (suite['path']??'') as String
+          ..platform = (suite['platform']??'') as String;
         break;
 
       case 'error':
-        tests[event['testID']]?.problems.add(Problem(event['error']??'' as String,
-            event['stackTrace']??'' as String, event['isFailure']??false as bool));
+        tests[event['testID']]?.problems.add(Problem((event['error']??'') as String,
+            (event['stackTrace']??'') as String, (event['isFailure']??false) as bool));
         break;
 
       case 'print':
-        tests[event['testID']??0 as int]?.prints.add(event['message']??'' as String);
+        tests[(event['testID']??0) as int]?.prints.add((event['message']??'') as String);
         break;
 
       case 'done':
